@@ -1,65 +1,113 @@
-import Image from "next/image";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import {
+  CheckCircle2,
+  BarChart3,
+  BookOpen,
+  Target,
+  ArrowRight,
+} from "lucide-react";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="flex flex-col min-h-screen">
+      {/* Header */}
+      <header className="border-b">
+        <div className="max-w-6xl mx-auto flex items-center justify-between h-16 px-4">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">
+                R
+              </span>
+            </div>
+            <span className="text-xl font-bold">Routinely</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link href="/login" className={buttonVariants({ variant: "ghost" })}>
+              Sign In
+            </Link>
+            <Link href="/signup" className={buttonVariants()}>
+              Get Started
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="flex-1 flex items-center justify-center px-4 py-20">
+        <div className="max-w-3xl text-center space-y-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+            Build Better Habits,{" "}
+            <span className="text-primary">One Day at a Time</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Your all-in-one daily planner for tracking habits, prayers, Quran
+            Hifz progress, and tasks. Stay consistent and see your growth.
           </p>
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <Link href="/signup" className={buttonVariants({ size: "lg" }) + " gap-2"}>
+              Start for Free
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </section>
+
+      {/* Features */}
+      <section className="border-t bg-muted/30 px-4 py-20">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">
+            Everything you need to plan your day
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <FeatureCard
+              icon={<CheckCircle2 className="h-8 w-8 text-green-600" />}
+              title="Habit Tracking"
+              description="Track daily, weekly, or custom habits. Mark complete with a tap and build streaks."
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <FeatureCard
+              icon={<Target className="h-8 w-8 text-blue-600" />}
+              title="Prayer Tracker"
+              description="Log your 5 daily prayers with on-time/late status. Track Qaza makeup prayers."
+            />
+            <FeatureCard
+              icon={<BookOpen className="h-8 w-8 text-purple-600" />}
+              title="Quran Hifz"
+              description="Track Sabq, Sabqi, and Manzil daily. See your memorization history."
+            />
+            <FeatureCard
+              icon={<BarChart3 className="h-8 w-8 text-orange-600" />}
+              title="Progress & Stats"
+              description="Visualize your consistency with charts, streaks, and completion rates."
+            />
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t py-8 px-4">
+        <div className="max-w-6xl mx-auto text-center text-sm text-muted-foreground">
+          <p>Routinely - Built with care for a better daily routine.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="p-6 rounded-xl border bg-card space-y-3">
+      {icon}
+      <h3 className="font-semibold text-lg">{title}</h3>
+      <p className="text-sm text-muted-foreground">{description}</p>
     </div>
   );
 }
