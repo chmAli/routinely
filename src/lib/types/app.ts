@@ -86,24 +86,31 @@ export interface QazaLog {
   created_at: string;
 }
 
+export type RevisionType = "sabq" | "sabqi";
+
+export interface HifzLineItem {
+  id: string;
+  entry_id: string;
+  revision_type: RevisionType;
+  surah: number;
+  start_ayah: number;
+  end_ayah: number;
+  notes: string | null;
+  display_order: number;
+  created_at: string;
+}
+
 export interface HifzEntry {
   id: string;
   user_id: string;
   entry_date: string;
-  sabq_surah: number | null;
-  sabq_start_ayah: number | null;
-  sabq_end_ayah: number | null;
-  sabq_notes: string | null;
-  sabqi_surah: number | null;
-  sabqi_start_ayah: number | null;
-  sabqi_end_ayah: number | null;
-  sabqi_notes: string | null;
   manzil_juz: number | null;
   manzil_surah_start: number | null;
   manzil_surah_end: number | null;
   manzil_notes: string | null;
   created_at: string;
   updated_at: string;
+  hifz_line_items?: HifzLineItem[];
 }
 
 export interface Surah {

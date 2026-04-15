@@ -5,18 +5,18 @@ import { revalidatePath } from "next/cache";
 
 export async function saveHifzEntry(data: {
   entryDate: string;
-  sabqSurah: number | null;
-  sabqStartAyah: number | null;
-  sabqEndAyah: number | null;
-  sabqNotes: string | null;
-  sabqiSurah: number | null;
-  sabqiStartAyah: number | null;
-  sabqiEndAyah: number | null;
-  sabqiNotes: string | null;
   manzilJuz: number | null;
   manzilSurahStart: number | null;
   manzilSurahEnd: number | null;
   manzilNotes: string | null;
+  lineItems: Array<{
+    revisionType: "sabq" | "sabqi";
+    surah: number;
+    startAyah: number;
+    endAyah: number;
+    notes: string | null;
+    displayOrder: number;
+  }>;
 }) {
   const supabase = await createClient();
   const {
@@ -24,27 +24,57 @@ export async function saveHifzEntry(data: {
   } = await supabase.auth.getUser();
   if (!user) return { error: "Not authenticated" };
 
-  const { error } = await supabase.from("hifz_entries").upsert(
-    {
-      user_id: user.id,
-      entry_date: data.entryDate,
-      sabq_surah: data.sabqSurah,
-      sabq_start_ayah: data.sabqStartAyah,
-      sabq_end_ayah: data.sabqEndAyah,
-      sabq_notes: data.sabqNotes,
-      sabqi_surah: data.sabqiSurah,
-      sabqi_start_ayah: data.sabqiStartAyah,
-      sabqi_end_ayah: data.sabqiEndAyah,
-      sabqi_notes: data.sabqiNotes,
-      manzil_juz: data.manzilJuz,
-      manzil_surah_start: data.manzilSurahStart,
-      manzil_surah_end: data.manzilSurahEnd,
-      manzil_notes: data.manzilNotes,
-    },
-    { onConflict: "user_id,entry_date" }
-  );
+  // Upsert parent entry (manzil fields only) and get its id
+  const { data: entry, error: upsertError } = await supabase
+    .from("hifz_entries")
+    .upsert(
+      {
+        user_id: user.id,
+        entry_date: data.entryDate,
+        manzil_juz: data.manzilJuz,
+        manzil_surah_start: data.manzilSurahStart,
+        manzil_surah_end: data.manzilSurahEnd,
+        manzil_notes: data.manzilNotes,
+      },
+      { onConflict: "user_id,entry_date" }
+    )
+    .select("id")
+    .single();
 
-  if (error) return { error: error.message };
+  if (upsertError || !entry) {
+    return { error: upsertError?.message || "Failed to save entry" };
+  }
+
+  // Delete existing line items for this entry
+  const { error: deleteError } = await supabase
+    .from("hifz_line_items")
+    .delete()
+    .eq("entry_id", entry.id);
+
+  if (deleteError) {
+    return { error: deleteError.message };
+  }
+
+  // Bulk insert new line items
+  if (data.lineItems.length > 0) {
+    const { error: insertError } = await supabase
+      .from("hifz_line_items")
+      .insert(
+        data.lineItems.map((item) => ({
+          entry_id: entry.id,
+          revision_type: item.revisionType,
+          surah: item.surah,
+          start_ayah: item.startAyah,
+          end_ayah: item.endAyah,
+          notes: item.notes,
+          display_order: item.displayOrder,
+        }))
+      );
+
+    if (insertError) {
+      return { error: insertError.message };
+    }
+  }
 
   revalidatePath("/quran");
   return { success: true };

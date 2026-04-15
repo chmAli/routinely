@@ -10,12 +10,12 @@ export default async function QuranPage() {
   const [todayEntryRes, historyRes, surahsRes] = await Promise.all([
     supabase
       .from("hifz_entries")
-      .select("*")
+      .select("*, hifz_line_items(*)")
       .eq("entry_date", today)
       .maybeSingle(),
     supabase
       .from("hifz_entries")
-      .select("*")
+      .select("*, hifz_line_items(*)")
       .order("entry_date", { ascending: false })
       .limit(30),
     supabase

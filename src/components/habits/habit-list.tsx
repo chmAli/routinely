@@ -101,11 +101,9 @@ export function HabitList({ habits }: { habits: Habit[] }) {
   return (
     <div className="space-y-6">
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogTrigger>
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" />
-            New Habit
-          </Button>
+        <DialogTrigger render={<Button className="gap-2" />}>
+          <Plus className="h-4 w-4" />
+          New Habit
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>

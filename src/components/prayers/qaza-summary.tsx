@@ -119,11 +119,9 @@ function QazaRow({
       </div>
       <div className="flex items-center gap-2">
         <Dialog>
-          <DialogTrigger>
-            <Button variant="outline" size="sm" className="gap-1">
-              <Minus className="h-3.5 w-3.5" />
-              Log Makeup
-            </Button>
+          <DialogTrigger render={<Button variant="outline" size="sm" className="gap-1" />}>
+            <Minus className="h-3.5 w-3.5" />
+            Log Makeup
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -147,10 +145,8 @@ function QazaRow({
         </Dialog>
 
         <Dialog>
-          <DialogTrigger>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <Settings2 className="h-4 w-4" />
-            </Button>
+          <DialogTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8" />}>
+            <Settings2 className="h-4 w-4" />
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

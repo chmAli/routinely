@@ -44,10 +44,12 @@ export function PrayerTracker({
 
   function handleStatusChange(prayer: PrayerName, status: string) {
     startTransition(async () => {
-      if (status === "none") {
-        await removePrayerLog(prayer, date);
-      } else {
-        await logPrayer(prayer, date, status as PrayerStatus);
+      const result =
+        status === "none"
+          ? await removePrayerLog(prayer, date)
+          : await logPrayer(prayer, date, status as PrayerStatus);
+      if (result?.error) {
+        console.error("Prayer action failed:", result.error);
       }
     });
   }

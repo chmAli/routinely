@@ -28,10 +28,11 @@ export function PrayerSection({
 
   function handleToggle(prayer: PrayerName, isCompleted: boolean) {
     startTransition(async () => {
-      if (isCompleted) {
-        await removePrayerLog(prayer, date);
-      } else {
-        await logPrayer(prayer, date, "on_time");
+      const result = isCompleted
+        ? await removePrayerLog(prayer, date)
+        : await logPrayer(prayer, date, "on_time");
+      if (result?.error) {
+        console.error("Prayer action failed:", result.error);
       }
     });
   }
