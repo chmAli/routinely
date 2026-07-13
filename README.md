@@ -64,3 +64,6 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Roadmap
 
 - Generalize the balance and hierarchy engines so users can define their own complex trackers
+- Reminders
+- Notifications
+- Ability to create custom complex Trackers
